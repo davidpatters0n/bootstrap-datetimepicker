@@ -1566,6 +1566,7 @@
         }
         return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), 0);
       }
+      var originalDate = date;
       var parts = date && date.toString().match(this.nonpunctuation) || [],
         date = new Date(0, 0, 0, 0, 0, 0, 0),
         parsed = {},
@@ -1668,6 +1669,16 @@
           s = setters_order[i];
           if (s in parsed && !isNaN(parsed[s]))
             setters_map[s](date, parsed[s])
+        }
+      }
+      //No parsing worked, so attempt to just use Date's parsing
+      else {
+        var dateInstance = new Date(originalDate);
+        if (dateInstance.toString() !== 'Invalid Date') {
+            return this.parseDate(dateInstance);
+        //Not even date parsing worked. Send back the current date time
+        } else {
+            return this.parseDate(new Date());
         }
       }
       return date;
