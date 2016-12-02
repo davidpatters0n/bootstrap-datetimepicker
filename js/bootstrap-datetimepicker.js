@@ -1678,7 +1678,13 @@
             return this.parseDate(dateInstance);
         //Not even date parsing worked. Send back the current date time
         } else {
-            return this.parseDate(new Date());
+            parts_copy = parts
+            parts_copy[parts_copy.length - 2] = parts_copy[parts_copy.length - 2] + ":";
+            if ( ((newDate = new Date(parts_copy)) && newDate.toString() !== 'Invalid Date') ) {
+              return this.parseDate(newDate);
+            } else {
+              return this.parseDate(new Date());
+            }
         }
       }
       return date;
